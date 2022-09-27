@@ -1,5 +1,5 @@
 *.vagrant/
-#.gitignore
+.gitignore
 Gemfile.lock
 mysql-data
 wordpress-data
