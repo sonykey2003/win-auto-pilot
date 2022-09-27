@@ -1,0 +1,17 @@
+*.vagrant/
+#.gitignore
+Gemfile.lock
+mysql-data
+wordpress-data
+registry-data
+sample-data
+*.zip
+.DS_Store
+PSTools
+*.pkrvars.hcl
+secret_vars.tf
+*.terraform/
+*.terraform*
+terraform.tfstate*
+*.pem
+*autoCreateEC2/
