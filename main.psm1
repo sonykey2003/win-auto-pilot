@@ -1,3 +1,5 @@
+ 
+
 #Local logging function
 function Write-LogEntry {
     param(
@@ -87,7 +89,7 @@ function Get-MachineType {
         $type = (Get-WmiObject -Class Win32_ComputerSystem -Property PCSystemType).PCSystemType
         switch ($type) {
             "2" { $suffix = 'lt' } #laptop
-            Default { $suffix = 'desktop' } #desktop
+            Default { $suffix = 'dt' } #desktop
         }
         return $suffix
         Write-LogEntry -Value "Machine type aquired - $suffix" -filename $logfilename
@@ -103,17 +105,13 @@ function Get-MachineType {
 function Set-Hostname {
     Write-LogEntry -Value "Renaming machine" -filename $logfilename
     try{
-        $CountryCode = (Get-GeoInfo).cc
+        $CountryCode = (Get-GeoApi).cc
         $SN = Get-SN -erroraction silentlycontinue
         $suffix = Get-MachineType -erroraction silentlycontinue
-        $usage = $null
-        if ($suffix -eq '-D'){
-            $usage = Get-MachineDept -erroraction silentlycontinue
-        }
-        $NewHostName = 'IT' + $CountryCode + $usage + $SN + $suffix
+        $NewHostName = $CountryCode + $SN + $suffix
 
         Write-LogEntry -Value "Restarting the machine for stage 2" -filename $logfilename
-        rename-computer -NewName $NewHostName -Restart -force -erroraction silentlycontinue
+        rename-computer -NewName $NewHostName -erroraction silentlycontinue
     }
     catch [System.Exception]{
         Write-LogEntry -Value "Renaming failed due to $($_.Exception.Message)" -filename $logfilename -infotype "Error"
@@ -124,38 +122,23 @@ function Set-Hostname {
 
 #set hostname prior rebooting - implement a 20 char guardrail
 function Get-SN {
+    param (
+        [parameter(Mandatory=$false)]
+        [Int32]$snCharLimit = 10 #default character limit for SN set to 10
+    )
     Write-LogEntry -Value "Getting SN" -filename $logfilename
-    try{
-        $Man = (Get-WmiObject  -class Win32_Computersystem ).Manufacturer
-        switch -Wildcard ($man) {
-            "Dell*" { $SN = (get-ciminstance win32_bios).serialnumber.toUpper() }
-            Default { $SN = "NONSTD" }
-        }   
-        return $SN
-        Write-LogEntry -Value "SN aquired" -filename $logfilename
+    try {
+        $SN = (get-ciminstance win32_bios).serialnumber.toUpper().replace(' ','')   
+        if ($SN.Length -gt $snCharLimit){
+            return $sn = $sn.Substring(0,$snCharLimit)
+        }
     }
     catch [System.Exception]{
         Write-LogEntry -Value "Getting SN failed due to $($_.Exception.Message)" -filename $logfilename -infotype "Error"
 
     }
-}
-
-#set hostname prior rebooting - implement a 20 char guardrail
-function Get-SN {
-    Write-LogEntry -Value "Getting SN" -filename $logfilename
-    try{
-        $Man = (Get-WmiObject  -class Win32_Computersystem ).Manufacturer
-        switch -Wildcard ($man) {
-            "Dell*" { $SN = (get-ciminstance win32_bios).serialnumber.toUpper() }
-            Default { $SN = "NONSTD" }
-        }   
-        return $SN
-        Write-LogEntry -Value "SN aquired" -filename $logfilename
-    }
-    catch [System.Exception]{
-        Write-LogEntry -Value "Getting SN failed due to $($_.Exception.Message)" -filename $logfilename -infotype "Error"
-
-    }
+    
+    
 }
 
 #Getting the JC device enrol connect_key via a custom API call on Make
@@ -169,9 +152,8 @@ function getConnKey {
     
     #retry 5 times 
     $retry = 5
-    $webhook = "https://hook.us1.make.com/b6rlunkty6aff82mc0sy89u3wpl5xkmh"
-   
-
+    $webhook = "https://hook.us1.make.com/b6rlunkty6aff82mc0sy89u3wpl5xkmh"   
+    $reObj = "" | select conn_key,email
     do{
         if ($retry -lt 5){
             Write-Host "Trying again...please input the correct info!" -ForegroundColor DarkYellow
@@ -188,13 +170,56 @@ function getConnKey {
         }
         catch [System.Exception]{
             
-            #Write-LogEntry -Value "$($_.Exception.Message)" -filename $logfilename -infotype "Error"
+            Write-LogEntry -Value "$($_.Exception.Message)" -filename $logfilename -infotype "Error"
 
         }
         $retry -= 1            
         
     }
     while (($null -eq $re) -and ($retry -gt 0))
-    return $re
+    $reObj.conn_key = $re | ConvertTo-SecureString  -Force -AsPlainText
+    $reObj.email = $email
 
+    return $reObj
+
+}
+
+function installJCAgent {
+    param (
+        [parameter(Mandatory=$true)]   
+        [securestring]$conn_Key
+    )
+    if ($null -eq $conn_Key){
+        Write-Host "JC agent won't be installed, please contact your IT admins!" -ForegroundColor Red
+        Write-LogEntry -Value "JC agent won't be installed, unable to verify the user, exiting the provisioning! " -filename $logfilename -infotype "Error"
+        break
+    }
+    else {
+        try{ 
+            do {
+                #actual installation block
+                $jcAgentUri = "https://raw.githubusercontent.com/TheJumpCloud/support/master/scripts/windows/InstallWindowsAgent.ps1"
+                cd $env:temp |`
+                Invoke-Expression; Invoke-RestMethod -Method Get -URI $jcAgentUri -OutFile InstallWindowsAgent.ps1 |`
+                Invoke-Expression; ./InstallWindowsAgent.ps1 -JumpCloudConnectKey ($conn_key | ConvertFrom-SecureString)
+    
+                #checking
+                $jcAgentSvc = Get-Service *jumpcloud* -erroraction silentlycontinue
+                Write-Host "Checking if JC agent is running..."
+                $agentCheckUp -= 1
+                sleep 10
+                
+            } until (
+                ($jcAgentSvc.status -eq "Running") -and (Test-Path $jcConfig) -or $agentCheckUp -gt 0
+            )       
+        }
+        catch [System.Exception]{
+            Write-Host "JC agent can't be installed, please contact your IT admins!" -ForegroundColor Red
+            Write-LogEntry -Value "JC agent won't be installed, due to $($_.Exception.Message)" -filename $logfilename -infotype "Error"
+        }
+       
+        
+    }
+    
+        
 }

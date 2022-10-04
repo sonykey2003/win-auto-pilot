@@ -5,15 +5,10 @@ Set-ExecutionPolicy RemoteSigned -Force
 $logfilename = "provisioning"
 
 #import the module
-$modules = Get-ChildItem -Path C:\Windows\Temp *.psm1
-foreach ($m in $modules){
-    try {
-        Import-Module $m.FullName -ErrorAction SilentlyContinue
-    }
-    catch [System.Exception] {
-        Write-Output $_
-    }         
-}
+$moduleUrl = "https://raw.githubusercontent.com/sonykey2003/win-auto-pilot/main.psm1"
+$script = [scriptblock]::Create((Invoke-RestMethod -Method get -Uri $moduleUrl))
+New-Module -Name wap.main -ScriptBlock $script
+
 #set timezone based on the geo location
 $countryInfo = Get-GeoApi
 set-tz -countryname $countryInfo.country_name
@@ -21,13 +16,12 @@ set-tz -countryname $countryInfo.country_name
 ## https://support.jumpcloud.com/support/s/article/naming-convention-for-users1#convention
 
 #change the hostname to new
-## sync the new hostname with jc on Hostname & displayname fields
-## then reboot after everything is done
-
+Set-Hostname
 
 #installing JC agent
-$conn_Key = getConnKey
+$conn_Key = (getConnKey).conn_key
+$agentCheckUp = 3
+$jcConfig = "C:\Program Files\JumpCloud\Plugins\Contrib\jcagent.conf"
 
-Invoke-Expression -Command (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/TheJumpCloud/support/master/scripts/windows/InstallWindowsAgent.ps1") -JumpCloudConnectKey $conn_Key
-
-
+installJCAgent -conn_key $conn_Key
+$systemKey = (ConvertFrom-Json (Get-Content $jcConfig)).systemKey
