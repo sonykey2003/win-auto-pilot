@@ -23,3 +23,11 @@ set-tz -countryname $countryInfo.country_name
 #change the hostname to new
 ## sync the new hostname with jc on Hostname & displayname fields
 ## then reboot after everything is done
+
+
+#installing JC agent
+$conn_Key = getConnKey
+
+Invoke-Expression -Command (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/TheJumpCloud/support/master/scripts/windows/InstallWindowsAgent.ps1") -JumpCloudConnectKey $conn_Key
+
+

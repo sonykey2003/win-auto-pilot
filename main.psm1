@@ -86,8 +86,8 @@ function Get-MachineType {
     try {
         $type = (Get-WmiObject -Class Win32_ComputerSystem -Property PCSystemType).PCSystemType
         switch ($type) {
-            "2" { $suffix = 'laptop' }
-            Default { $suffix = 'desktop' }
+            "2" { $suffix = 'lt' } #laptop
+            Default { $suffix = 'desktop' } #desktop
         }
         return $suffix
         Write-LogEntry -Value "Machine type aquired - $suffix" -filename $logfilename
@@ -140,17 +140,61 @@ function Get-SN {
     }
 }
 
-#getting serial number from the machine for renaming purpose
-function Get-SN  {
-    param (
-        [parameter(Mandatory=$false)]
-        [Int32]$snCharLimit = 10 #default character limit for SN set to 10
-    )
-    #$SN = (get-ciminstance win32_bios).serialnumber.toUpper().replace(' ','')
-    $SN = "PARALLELS-50B04C2548824CE29BD2E0C041CB00DF"
-    
-    if ($SN.Length -gt $snCharLimit){
-        return $sn = $sn.Substring(0,$snCharLimit)
+#set hostname prior rebooting - implement a 20 char guardrail
+function Get-SN {
+    Write-LogEntry -Value "Getting SN" -filename $logfilename
+    try{
+        $Man = (Get-WmiObject  -class Win32_Computersystem ).Manufacturer
+        switch -Wildcard ($man) {
+            "Dell*" { $SN = (get-ciminstance win32_bios).serialnumber.toUpper() }
+            Default { $SN = "NONSTD" }
+        }   
+        return $SN
+        Write-LogEntry -Value "SN aquired" -filename $logfilename
     }
+    catch [System.Exception]{
+        Write-LogEntry -Value "Getting SN failed due to $($_.Exception.Message)" -filename $logfilename -infotype "Error"
+
+    }
+}
+
+#Getting the JC device enrol connect_key via a custom API call on Make
+#https://us1.make.com/28273/scenarios/395966/edit
+function getConnKey {
+    param (
+        #[parameter(Mandatory=$true, HelpMessage="Please input your JumpCloud email address.")]
+        #[ValidateNotNullOrEmpty()]    
+        [string]$email
+    )
     
+    #retry 5 times 
+    $retry = 5
+    $webhook = "https://hook.us1.make.com/b6rlunkty6aff82mc0sy89u3wpl5xkmh"
+   
+
+    do{
+        if ($retry -lt 5){
+            Write-Host "Trying again...please input the correct info!" -ForegroundColor DarkYellow
+        }
+        $email = read-host "please enter your JC email, you have $retry chances left" 
+        $enrollmentPin = Read-Host  "please enter your enrollmentPin, you have $retry chances left" 
+        $params = @{
+            "email"=$email
+            "enrollmentPin" = $enrollmentPin
+        }
+        
+        try{
+            $re = Invoke-RestMethod -Uri $webhook -Body $params -Method Get -ErrorAction SilentlyContinue
+        }
+        catch [System.Exception]{
+            
+            #Write-LogEntry -Value "$($_.Exception.Message)" -filename $logfilename -infotype "Error"
+
+        }
+        $retry -= 1            
+        
+    }
+    while (($null -eq $re) -and ($retry -gt 0))
+    return $re
+
 }
