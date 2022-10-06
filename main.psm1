@@ -221,13 +221,31 @@ function installJCAgent {
         
 }
 
-function jcSystemOps  {
+function jcSystemBindUser  {
     param (
-        [string]$url
+        [string]$url,
+        [string]$systemKey,
+        [string]$newHostname,
+        [string]$user_id,
+        [string]$sudo = "false",
+        [string]$sudoWithoutPW = "false"
     )
 
+    #sudo with pw option only valid when sudo = true
+    if ($sudo -ne "false") {
+        $sudoWithOutPW = $false
+    }
+
+    $params = @{
+        "systemKey" = $systemKey
+        "newHostname" = $newHostname
+        "sudo" = $sudo
+        "sudoWithoutPW" = $sudoWithoutPW
+        "user_id" = $user_id
+    }
+    
     try{
-        return $re = Invoke-RestMethod -Uri $url -Method Get -ErrorAction SilentlyContinue
+        return $re = Invoke-RestMethod -Uri $url -Method Get -body $params -ErrorAction SilentlyContinue
 
     }
     catch [System.Exception]{
@@ -238,3 +256,29 @@ function jcSystemOps  {
     
 }
 
+function jcSysAddGroup {
+    param (
+        [string]$url,
+        [string]$systemKey,
+        [string]$groupName
+      
+    )
+
+    $params = @{
+        "systemKey" = $systemKey
+        "groupName" = $groupName
+    }
+    #sudo with pw option only valid when sudo = true
+   
+
+    try{
+        return $re = Invoke-RestMethod -Uri $url -Method Get -Body $params -ErrorAction SilentlyContinue
+
+    }
+    catch [System.Exception]{
+        
+        Write-LogEntry -Value "$($_.Exception.Message)" -filename $logfilename -infotype "Error"
+
+    }    
+    
+}

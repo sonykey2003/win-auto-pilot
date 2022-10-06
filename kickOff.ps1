@@ -8,7 +8,7 @@ Set-ExecutionPolicy RemoteSigned -Force
 $logfilename = "provisioning"
 
 #import the module
-$moduleUrl = "https://raw.githubusercontent.com/sonykey2003/win-auto-pilot/main.psm1"
+$moduleUrl = "https://raw.githubusercontent.com/sonykey2003/win-auto-pilot/master/main.psm1"
 $script = [scriptblock]::Create((Invoke-RestMethod -Method get -Uri $moduleUrl))
 New-Module -Name wap.main -ScriptBlock $script
 
@@ -36,11 +36,13 @@ $jcSystemBindUser_url = "https://hook.us1.make.com/y85m9lxkhgrjlcco6ahzakasg3bt7
 $jcSystemAddGroup_url = "https://hook.us1.make.com/8hakbgiqck9iojz5mn5e35em6p84q1ry"
 
 #do user binding
-jcSystemOps -url $jcSystemBindUser_url
+
+jcSystemBindUser -url $jcSystemBindUser_url -systemKey $systemKey -newHostname $newHostname -user_id $onboardInfo.user_id
 sleep 10
 
 #add the device to a default group
-jcSystemOps -url $jcSystemAddGroup_url
+$groupName = "All Windows"
+jcSysAddGroup -url $jcSystemAddGroup_url -systemKey $systemKey -groupName $groupName
 
 Write-Host "Done!" -ForegroundColor Green
 
