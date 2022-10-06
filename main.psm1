@@ -178,7 +178,7 @@ function getConnKey {
         
     }
     while (($null -eq $re) -and ($retry -gt 0))
-    $re.conn_key = $re.conn_key
+    $re.conn_key = $re.conn_key | ConvertTo-SecureString -AsPlainText -Force
     
     return $re
 
