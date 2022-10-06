@@ -112,6 +112,7 @@ function Set-Hostname {
 
         Write-LogEntry -Value "Restarting the machine for stage 2" -filename $logfilename
         rename-computer -NewName $NewHostName -erroraction silentlycontinue
+        return $NewHostName
     }
     catch [System.Exception]{
         Write-LogEntry -Value "Renaming failed due to $($_.Exception.Message)" -filename $logfilename -infotype "Error"
@@ -145,15 +146,12 @@ function Get-SN {
 #https://us1.make.com/28273/scenarios/395966/edit
 function getConnKey {
     param (
-        #[parameter(Mandatory=$true, HelpMessage="Please input your JumpCloud email address.")]
-        #[ValidateNotNullOrEmpty()]    
-        [string]$email
+        [string]$email,
+        [string]$url
     )
     
     #retry 5 times 
     $retry = 5
-    $webhook = "https://hook.us1.make.com/b6rlunkty6aff82mc0sy89u3wpl5xkmh"   
-    $reObj = "" | select conn_key,email
     do{
         if ($retry -lt 5){
             Write-Host "Trying again...please input the correct info!" -ForegroundColor DarkYellow
@@ -166,7 +164,7 @@ function getConnKey {
         }
         
         try{
-            $re = Invoke-RestMethod -Uri $webhook -Body $params -Method Get -ErrorAction SilentlyContinue
+            $re = Invoke-RestMethod -Uri $url -Body $params -Method Get -ErrorAction SilentlyContinue
         }
         catch [System.Exception]{
             
@@ -177,10 +175,9 @@ function getConnKey {
         
     }
     while (($null -eq $re) -and ($retry -gt 0))
-    $reObj.conn_key = $re | ConvertTo-SecureString  -Force -AsPlainText
-    $reObj.email = $email
-
-    return $reObj
+    $re.conn_key = $re.conn_key | ConvertTo-SecureString  -Force -AsPlainText
+    
+    return $re
 
 }
 
@@ -223,3 +220,21 @@ function installJCAgent {
     
         
 }
+
+function jcSystemOps  {
+    param (
+        [string]$url
+    )
+
+    try{
+        return $re = Invoke-RestMethod -Uri $url -Method Get -ErrorAction SilentlyContinue
+
+    }
+    catch [System.Exception]{
+        
+        Write-LogEntry -Value "$($_.Exception.Message)" -filename $logfilename -infotype "Error"
+
+    }    
+    
+}
+
