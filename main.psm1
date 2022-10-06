@@ -201,7 +201,7 @@ function installJCAgent {
                 $jcAgentUri = "https://raw.githubusercontent.com/TheJumpCloud/support/master/scripts/windows/InstallWindowsAgent.ps1"
                 cd $env:temp |`
                 Invoke-Expression; Invoke-RestMethod -Method Get -URI $jcAgentUri -OutFile InstallWindowsAgent.ps1 |`
-                Invoke-Expression; ./InstallWindowsAgent.ps1 -JumpCloudConnectKey ($conn_key | ConvertFrom-SecureString)
+                Invoke-Expression; ./InstallWindowsAgent.ps1 -JumpCloudConnectKey $conn_key
     
                 #checking
                 $jcAgentSvc = Get-Service *jumpcloud* -erroraction silentlycontinue

@@ -24,8 +24,10 @@ $newHostname = Set-Hostname
 #installing JC agent
 $getConnkey_url = "https://hook.us1.make.com/b6rlunkty6aff82mc0sy89u3wpl5xkmh"  
 $onboardInfo = getConnKey -url $getConnkey_url 
-$conn_Key = $onboardInfo.conn_key | ConvertTo-SecureString -AsPlainText -Force
-$jcConfig = "C:\Program Files\JumpCloud\Plugins\Contrib\jcagent.conf"
+$BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($onboardInfo.conn_key)
+$conn_Key = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
+$jcConfig = "C:\Program Files\JumpCloud\Plugins\Contrib\jcagent.conf" 
+ 
 
 installJCAgent -conn_key ($conn_Key | ConvertFrom-SecureString)
 $systemKey = (ConvertFrom-Json (Get-Content $jcConfig)).systemKey
