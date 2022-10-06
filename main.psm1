@@ -108,7 +108,7 @@ function Set-Hostname {
         $CountryCode = (Get-GeoApi).country_code
         $SN = Get-SN -erroraction silentlycontinue
         $suffix = Get-MachineType -erroraction silentlycontinue
-        $NewHostName = $CountryCode + $SN + $suffix
+        $NewHostName = $CountryCode + "-" + $SN + "-" + $suffix
 
         Write-LogEntry -Value "Restarting the machine for stage 2" -filename $logfilename
         rename-computer -NewName $NewHostName -erroraction silentlycontinue
