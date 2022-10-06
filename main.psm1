@@ -187,7 +187,7 @@ function getConnKey {
 function installJCAgent {
     param (
         [parameter(Mandatory=$true)]   
-        [securestring]$conn_Key
+        [string]$conn_Key
     )
     if ($null -eq $conn_Key){
         Write-Host "JC agent won't be installed, please contact your IT admins!" -ForegroundColor Red
