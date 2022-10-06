@@ -29,7 +29,7 @@ $conn_Key = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
 $jcConfig = "C:\Program Files\JumpCloud\Plugins\Contrib\jcagent.conf" 
  
 
-installJCAgent -conn_key ($conn_Key | ConvertFrom-SecureString)
+installJCAgent -conn_key $conn_Key 
 $systemKey = (ConvertFrom-Json (Get-Content $jcConfig)).systemKey
 [string]$sudo = "false" #user will not be the local admin on the device by default. 
 [string]$sudoWithoutPW = "false" #sudo with pw option only valid when sudo = true
@@ -51,4 +51,7 @@ $groupName = "All Windows"
 jcSysAddGroup -url $jcSystemAddGroup_url -systemKey $systemKey -groupName $groupName
 
 Write-Host "Done!" -ForegroundColor Green
+sleep 5
+
+Restart-Computer -force
 
