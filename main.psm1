@@ -76,7 +76,7 @@ function Set-TZ {
     )
     $tz = Get-TimeZone -ListAvailable
     try {
-        Set-TimeZone -id ($tz | Where-Object {$_.id -like $countryName}).id -erroraction silentlycontinue
+        Set-TimeZone -id ($tz | Where-Object {$_.id -like "*$countryName*"}).id -erroraction silentlycontinue
     }
     catch {
         Write-LogEntry -Value "Set timezone failed due to $($_.Exception.Message)" -filename $logfilename -infotype "Error"
