@@ -105,7 +105,7 @@ function Get-MachineType {
 function Set-Hostname {
     Write-LogEntry -Value "Renaming machine" -filename $logfilename
     try{
-        $CountryCode = (Get-GeoApi).cc
+        $CountryCode = (Get-GeoApi).country_code
         $SN = Get-SN -erroraction silentlycontinue
         $suffix = Get-MachineType -erroraction silentlycontinue
         $NewHostName = $CountryCode + $SN + $suffix
@@ -132,6 +132,9 @@ function Get-SN {
         $SN = (get-ciminstance win32_bios).serialnumber.toUpper().replace(' ','')   
         if ($SN.Length -gt $snCharLimit){
             return $sn = $sn.Substring(0,$snCharLimit)
+        }
+        else {
+            return $sn
         }
     }
     catch [System.Exception]{
@@ -175,7 +178,7 @@ function getConnKey {
         
     }
     while (($null -eq $re) -and ($retry -gt 0))
-    $re.conn_key = $re.conn_key | ConvertTo-SecureString  -Force -AsPlainText
+    $re.conn_key = $re.conn_key
     
     return $re
 

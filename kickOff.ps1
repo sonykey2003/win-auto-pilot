@@ -23,21 +23,25 @@ $newHostname = Set-Hostname
 
 #installing JC agent
 $getConnkey_url = "https://hook.us1.make.com/b6rlunkty6aff82mc0sy89u3wpl5xkmh"  
-$onboardInfo = getConnKey -url $getConnkey_url
-$conn_Key = $onboardInfo.conn_key
-$agentCheckUp = 3
+$onboardInfo = getConnKey -url $getConnkey_url 
+$conn_Key = $onboardInfo.conn_key | ConvertTo-SecureString -AsPlainText -Force
 $jcConfig = "C:\Program Files\JumpCloud\Plugins\Contrib\jcagent.conf"
 
-installJCAgent -conn_key $conn_Key
+installJCAgent -conn_key ($conn_Key | ConvertFrom-SecureString)
 $systemKey = (ConvertFrom-Json (Get-Content $jcConfig)).systemKey
-[boolean]$sudo = $false #user will not be the local admin on the device by default. 
+[string]$sudo = "false" #user will not be the local admin on the device by default. 
+[string]$sudoWithoutPW = "false" #sudo with pw option only valid when sudo = true
 
 $jcSystemBindUser_url = "https://hook.us1.make.com/y85m9lxkhgrjlcco6ahzakasg3bt7cr7"
 $jcSystemAddGroup_url = "https://hook.us1.make.com/8hakbgiqck9iojz5mn5e35em6p84q1ry"
 
 #do user binding
 
-jcSystemBindUser -url $jcSystemBindUser_url -systemKey $systemKey -newHostname $newHostname -user_id $onboardInfo.user_id
+jcSystemBindUser -url $jcSystemBindUser_url `
+ -systemKey $systemKey `
+ -newHostname $newHostname `
+ -user_id $onboardInfo.user_id `
+ -sudo $sudo -sudoWithoutPW $sudoWithoutPW
 sleep 10
 
 #add the device to a default group
