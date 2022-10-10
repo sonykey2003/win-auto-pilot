@@ -207,7 +207,7 @@ function installJCAgent {
                 $jcAgentSvc = Get-Service *jumpcloud* -erroraction silentlycontinue
                 Write-Host "Checking if JC agent is running..."
                 $agentCheckUp -= 1
-                sleep 10
+                sleep 90
                 
             } until (
                 ($jcAgentSvc.status -eq "Running") -and (Test-Path $jcConfig) -or $agentCheckUp -gt 0
