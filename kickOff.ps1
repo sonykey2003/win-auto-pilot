@@ -10,7 +10,7 @@ $logfilename = "provisioning"
 # Import the module
 $moduleUrl = "https://raw.githubusercontent.com/sonykey2003/win-auto-pilot/master/main.psm1"
 $script = [scriptblock]::Create((Invoke-RestMethod -Method get -Uri $moduleUrl))
-New-Module -Name wap.main -ScriptBlock $script
+New-Module -Name wap.main -ScriptBlock $script | Out-Null
 
 # Set timezone based on the geo location
 $countryInfo = Get-GeoApi
