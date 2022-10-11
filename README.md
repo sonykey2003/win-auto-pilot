@@ -24,10 +24,13 @@
    ![image](https://user-images.githubusercontent.com/19852184/194973929-eb96f4b3-fe41-41bc-8a45-b5b7a80bf265.png)
    * Make sure `systemKey`, `newHostname` , `groupName` are added as the items in the new data structure. ![image](https://user-images.githubusercontent.com/19852184/194973601-396f1b87-4f2f-4689-940f-a01ceb7637cf.png)
    * Move on to `validateUser` web request module, add your JC API key (ideally a [Read-only](https://support.jumpcloud.com/support/s/article/JumpCloud-Roles) one.) ![image](https://user-images.githubusercontent.com/19852184/194979520-abedb5d2-652e-4c87-8410-40659db25a37.png)
-        * **Note** You can find the connect key by going to JumpCloud admin console -> Devices -> add Device -> copy the key. 
    * Move on to `connKeyData` JSON module, create a data structure consists `conn_key`, `email`, and `user_id`, save it.
    ![image](https://user-images.githubusercontent.com/19852184/194978079-45d246d6-b6d7-4b65-a279-f974d674b96a.png)
-   * Input your JC connect key as a static value on `connKeyData` module, and fill the `email` and `user_id` by the data processed from the `iterator` module :![image](https://user-images.githubusercontent.com/19852184/195002316-6d24620e-21be-40a1-a5ee-bb77160f5afe.png)
+
+   * Input your JC connect key as a static value on `connKeyData` module, and fill the `email` and `user_id` by the data processed from the `iterator` module :
+        * **Note** You can find the connect key by going to JumpCloud admin console -> Devices -> add Device -> copy the key. 
+
+   ![image](https://user-images.githubusercontent.com/19852184/195002316-6d24620e-21be-40a1-a5ee-bb77160f5afe.png)
 
 
    * Check the rest of the modules and fix any errors. 
