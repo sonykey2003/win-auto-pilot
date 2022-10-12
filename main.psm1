@@ -187,7 +187,8 @@ function getConnKey {
 function installJCAgent {
     param (
         [parameter(Mandatory=$true)]   
-        [string]$conn_Key
+        [string]$conn_Key,
+        [Int32]$agentCheckUp=3
     )
     if ($null -eq $conn_Key){
         Write-Host "JC agent won't be installed, please contact your IT admins!" -ForegroundColor Red
@@ -207,7 +208,7 @@ function installJCAgent {
                 $jcAgentSvc = Get-Service *jumpcloud* -erroraction silentlycontinue
                 Write-Host "Checking if JC agent is running..."
                 $agentCheckUp -= 1
-                sleep 10
+                sleep 20
                 
             } until (
                 ($jcAgentSvc.status -eq "Running") -and (Test-Path $jcConfig) -or $agentCheckUp -gt 0
