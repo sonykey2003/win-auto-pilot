@@ -110,7 +110,7 @@ function Set-Hostname {
         $suffix = Get-MachineType -erroraction silentlycontinue
         $NewHostName = $CountryCode + "-" + $SN + "-" + $suffix
 
-        Write-LogEntry -Value "Restarting the machine for stage 2" -filename $logfilename
+        Write-LogEntry -Value "new name will be take effect after the next reboot" -filename $logfilename
         rename-computer -NewName $NewHostName -erroraction silentlycontinue
         return $NewHostName
     }
@@ -188,7 +188,7 @@ function installJCAgent {
     param (
         [parameter(Mandatory=$true)]   
         [string]$conn_Key,
-        [Int32]$agentCheckUp=3
+        [Int32]$agentCheckUp=5
     )
     if ($null -eq $conn_Key){
         Write-Host "JC agent won't be installed, please contact your IT admins!" -ForegroundColor Red
@@ -208,7 +208,7 @@ function installJCAgent {
                 $jcAgentSvc = Get-Service *jumpcloud* -erroraction silentlycontinue
                 Write-Host "Checking if JC agent is running..."
                 $agentCheckUp -= 1
-                sleep 20
+                sleep 120
                 
             } until (
                 ($jcAgentSvc.status -eq "Running") -and (Test-Path $jcConfig) -or $agentCheckUp -gt 0
