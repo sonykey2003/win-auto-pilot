@@ -13,7 +13,7 @@
             "metadata": {
                 "designer": {
                     "x": 0,
-                    "y": 300
+                    "y": 450
                 },
                 "restore": {
                     "parameters": {
@@ -44,7 +44,7 @@
                         "type": "text",
                         "label": null,
                         "default": null,
-                        "required": true,
+                        "required": false,
                         "multiline": false
                     },
                     {
@@ -59,440 +59,288 @@
             }
         },
         {
-            "id": 1,
-            "module": "http:ActionSendDataAPIKeyAuth",
-            "version": 3,
-            "parameters": {
-                "auth": 5929,
-                "handleErrors": false
-            },
-            "mapper": {
-                "ca": "",
-                "qs": [
-                    {
-                        "name": "search[fields][]",
-                        "value": "email"
-                    },
-                    {
-                        "name": "search[searchTerm]",
-                        "value": "{{3.email}}"
-                    },
-                    {
-                        "name": "filter",
-                        "value": "attributes.name:$eq:enrollmentPin"
-                    },
-                    {
-                        "name": "filter",
-                        "value": "attributes.value:$eq:{{3.enrollmentPin}}"
-                    }
-                ],
-                "url": "https://console.jumpcloud.com/api/systemusers",
-                "gzip": true,
-                "method": "get",
-                "headers": [],
-                "timeout": "",
-                "useMtls": false,
-                "bodyType": "",
-                "serializeUrl": false,
-                "shareCookies": false,
-                "parseResponse": false,
-                "followRedirect": true,
-                "useQuerystring": false,
-                "followAllRedirects": false,
-                "rejectUnauthorized": true
-            },
-            "metadata": {
-                "designer": {
-                    "x": 300,
-                    "y": 300,
-                    "name": "validateUser"
-                },
-                "restore": {
-                    "expect": {
-                        "qs": {
-                            "mode": "chose",
-                            "items": [
-                                null,
-                                null,
-                                null,
-                                null
-                            ]
-                        },
-                        "method": {
-                            "mode": "chose",
-                            "label": "GET"
-                        },
-                        "headers": {
-                            "mode": "chose"
-                        },
-                        "bodyType": {
-                            "label": "Empty"
-                        }
-                    },
-                    "parameters": {
-                        "auth": {
-                            "label": "shawnSandBox_RO"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "auth",
-                        "type": "keychain:apikeyauth",
-                        "label": "Credentials",
-                        "required": true
-                    },
-                    {
-                        "name": "handleErrors",
-                        "type": "boolean",
-                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
-                        "required": true
-                    }
-                ],
-                "expect": [
-                    {
-                        "name": "url",
-                        "type": "url",
-                        "label": "URL",
-                        "required": true
-                    },
-                    {
-                        "name": "serializeUrl",
-                        "type": "boolean",
-                        "label": "Serialize URL",
-                        "required": true
-                    },
-                    {
-                        "name": "method",
-                        "type": "select",
-                        "label": "Method",
-                        "required": true,
-                        "validate": {
-                            "enum": [
-                                "get",
-                                "head",
-                                "post",
-                                "put",
-                                "patch",
-                                "delete",
-                                "options"
-                            ]
-                        }
-                    },
-                    {
-                        "name": "headers",
-                        "spec": [
-                            {
-                                "name": "name",
-                                "type": "text",
-                                "label": "Name",
-                                "required": true
-                            },
-                            {
-                                "name": "value",
-                                "type": "text",
-                                "label": "Value"
-                            }
-                        ],
-                        "type": "array",
-                        "label": "Headers"
-                    },
-                    {
-                        "name": "qs",
-                        "spec": [
-                            {
-                                "name": "name",
-                                "type": "text",
-                                "label": "Name",
-                                "required": true
-                            },
-                            {
-                                "name": "value",
-                                "type": "text",
-                                "label": "Value"
-                            }
-                        ],
-                        "type": "array",
-                        "label": "Query String"
-                    },
-                    {
-                        "name": "bodyType",
-                        "type": "select",
-                        "label": "Body type",
-                        "validate": {
-                            "enum": [
-                                "raw",
-                                "x_www_form_urlencoded",
-                                "multipart_form_data"
-                            ]
-                        }
-                    },
-                    {
-                        "name": "parseResponse",
-                        "type": "boolean",
-                        "label": "Parse response",
-                        "required": true
-                    },
-                    {
-                        "name": "timeout",
-                        "type": "uinteger",
-                        "label": "Timeout",
-                        "validate": {
-                            "max": 300,
-                            "min": 1
-                        }
-                    },
-                    {
-                        "name": "shareCookies",
-                        "type": "boolean",
-                        "label": "Share cookies with other HTTP modules",
-                        "required": true
-                    },
-                    {
-                        "name": "ca",
-                        "type": "cert",
-                        "label": "Self-signed certificate"
-                    },
-                    {
-                        "name": "rejectUnauthorized",
-                        "type": "boolean",
-                        "label": "Reject connections that are using unverified (self-signed) certificates",
-                        "required": true
-                    },
-                    {
-                        "name": "followRedirect",
-                        "type": "boolean",
-                        "label": "Follow redirect",
-                        "required": true
-                    },
-                    {
-                        "name": "useQuerystring",
-                        "type": "boolean",
-                        "label": "Disable serialization of multiple same query string keys as arrays",
-                        "required": true
-                    },
-                    {
-                        "name": "gzip",
-                        "type": "boolean",
-                        "label": "Request compressed content",
-                        "required": true
-                    },
-                    {
-                        "name": "useMtls",
-                        "type": "boolean",
-                        "label": "Use Mutual TLS",
-                        "required": true
-                    },
-                    {
-                        "name": "followAllRedirects",
-                        "type": "boolean",
-                        "label": "Follow all redirect",
-                        "required": true
-                    }
-                ]
-            }
-        },
-        {
-            "id": 7,
-            "module": "json:ParseJSON",
-            "version": 1,
-            "parameters": {
-                "type": 20966
-            },
-            "mapper": {
-                "json": "{{1.data}}"
-            },
-            "metadata": {
-                "designer": {
-                    "x": 600,
-                    "y": 300,
-                    "name": "userData"
-                },
-                "restore": {
-                    "parameters": {
-                        "type": {
-                            "label": "better"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "type",
-                        "type": "udt",
-                        "label": "Data structure"
-                    }
-                ],
-                "expect": [
-                    {
-                        "name": "json",
-                        "type": "text",
-                        "label": "JSON string",
-                        "required": true
-                    }
-                ],
-                "interface": [
-                    {
-                        "name": "os",
-                        "type": "text",
-                        "label": null,
-                        "default": null,
-                        "required": false,
-                        "multiline": false
-                    },
-                    {
-                        "name": "ttl",
-                        "type": "text",
-                        "label": null,
-                        "default": null,
-                        "required": false,
-                        "multiline": false
-                    },
-                    {
-                        "name": "pub_ip",
-                        "type": "text",
-                        "label": null,
-                        "default": null,
-                        "required": false,
-                        "multiline": false
-                    },
-                    {
-                        "name": "requester username",
-                        "type": "text",
-                        "label": null,
-                        "default": null,
-                        "required": false,
-                        "multiline": false
-                    },
-                    {
-                        "name": "region",
-                        "type": "text",
-                        "label": null,
-                        "default": null,
-                        "required": false,
-                        "multiline": false
-                    }
-                ]
-            }
-        },
-        {
-            "id": 5,
+            "id": 12,
             "module": "builtin:BasicRouter",
             "version": 1,
             "mapper": null,
             "metadata": {
                 "designer": {
-                    "x": 900,
-                    "y": 300
+                    "x": 300,
+                    "y": 450
                 }
             },
             "routes": [
                 {
                     "flow": [
                         {
-                            "id": 6,
-                            "module": "builtin:BasicFeeder",
-                            "version": 1,
-                            "parameters": {},
+                            "id": 1,
+                            "module": "http:ActionSendDataAPIKeyAuth",
+                            "version": 3,
+                            "parameters": {
+                                "auth": 5929,
+                                "handleErrors": false
+                            },
                             "filter": {
-                                "name": "if user is found, unlocked, and Activated",
+                                "name": "param exists",
                                 "conditions": [
                                     [
                                         {
-                                            "a": "{{7.totalCount}}",
-                                            "b": "0",
-                                            "o": "text:notequal"
+                                            "a": "{{3.email}}",
+                                            "o": "exist"
                                         },
                                         {
-                                            "a": "{{7.results[].state}}",
-                                            "b": "ACTIVATED",
-                                            "o": "text:equal"
-                                        },
-                                        {
-                                            "a": "{{7.results[].account_locked}}",
-                                            "b": "{{true}}",
-                                            "o": "text:notequal"
+                                            "a": "{{3.enrollmentPin}}",
+                                            "o": "exist"
                                         }
                                     ]
                                 ]
                             },
                             "mapper": {
-                                "array": "{{7.results}}"
+                                "ca": "",
+                                "qs": [
+                                    {
+                                        "name": "search[fields][]",
+                                        "value": "email"
+                                    },
+                                    {
+                                        "name": "search[searchTerm]",
+                                        "value": "{{3.email}}"
+                                    },
+                                    {
+                                        "name": "filter",
+                                        "value": "attributes.name:$eq:enrollmentPin"
+                                    },
+                                    {
+                                        "name": "filter",
+                                        "value": "attributes.value:$eq:{{3.enrollmentPin}}"
+                                    }
+                                ],
+                                "url": "https://console.jumpcloud.com/api/systemusers",
+                                "gzip": true,
+                                "method": "get",
+                                "headers": [],
+                                "timeout": "",
+                                "useMtls": false,
+                                "bodyType": "",
+                                "serializeUrl": false,
+                                "shareCookies": false,
+                                "parseResponse": false,
+                                "followRedirect": true,
+                                "useQuerystring": false,
+                                "followAllRedirects": false,
+                                "rejectUnauthorized": true
                             },
                             "metadata": {
                                 "designer": {
-                                    "x": 1200,
-                                    "y": 0
+                                    "x": 600,
+                                    "y": 300,
+                                    "name": "validateUser"
                                 },
                                 "restore": {
                                     "expect": {
-                                        "array": {
-                                            "mode": "edit"
+                                        "qs": {
+                                            "mode": "chose",
+                                            "items": [
+                                                null,
+                                                null,
+                                                null,
+                                                null
+                                            ]
+                                        },
+                                        "method": {
+                                            "mode": "chose",
+                                            "label": "GET"
+                                        },
+                                        "headers": {
+                                            "mode": "chose"
+                                        },
+                                        "bodyType": {
+                                            "label": "Empty"
+                                        }
+                                    },
+                                    "parameters": {
+                                        "auth": {
+                                            "label": "shawnSandBox_RO"
                                         }
                                     }
                                 },
+                                "parameters": [
+                                    {
+                                        "name": "auth",
+                                        "type": "keychain:apikeyauth",
+                                        "label": "Credentials",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "handleErrors",
+                                        "type": "boolean",
+                                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                                        "required": true
+                                    }
+                                ],
                                 "expect": [
                                     {
-                                        "mode": "edit",
-                                        "name": "array",
-                                        "spec": [],
+                                        "name": "url",
+                                        "type": "url",
+                                        "label": "URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "serializeUrl",
+                                        "type": "boolean",
+                                        "label": "Serialize URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "method",
+                                        "type": "select",
+                                        "label": "Method",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "get",
+                                                "head",
+                                                "post",
+                                                "put",
+                                                "patch",
+                                                "delete",
+                                                "options"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
                                         "type": "array",
-                                        "label": "Array"
+                                        "label": "Headers"
+                                    },
+                                    {
+                                        "name": "qs",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Query String"
+                                    },
+                                    {
+                                        "name": "bodyType",
+                                        "type": "select",
+                                        "label": "Body type",
+                                        "validate": {
+                                            "enum": [
+                                                "raw",
+                                                "x_www_form_urlencoded",
+                                                "multipart_form_data"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "parseResponse",
+                                        "type": "boolean",
+                                        "label": "Parse response",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "timeout",
+                                        "type": "uinteger",
+                                        "label": "Timeout",
+                                        "validate": {
+                                            "max": 300,
+                                            "min": 1
+                                        }
+                                    },
+                                    {
+                                        "name": "shareCookies",
+                                        "type": "boolean",
+                                        "label": "Share cookies with other HTTP modules",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "ca",
+                                        "type": "cert",
+                                        "label": "Self-signed certificate"
+                                    },
+                                    {
+                                        "name": "rejectUnauthorized",
+                                        "type": "boolean",
+                                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "followRedirect",
+                                        "type": "boolean",
+                                        "label": "Follow redirect",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useQuerystring",
+                                        "type": "boolean",
+                                        "label": "Disable serialization of multiple same query string keys as arrays",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "gzip",
+                                        "type": "boolean",
+                                        "label": "Request compressed content",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useMtls",
+                                        "type": "boolean",
+                                        "label": "Use Mutual TLS",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "followAllRedirects",
+                                        "type": "boolean",
+                                        "label": "Follow all redirect",
+                                        "required": true
                                     }
                                 ]
                             }
                         },
                         {
-                            "id": 11,
-                            "module": "json:CreateJSON",
+                            "id": 7,
+                            "module": "json:ParseJSON",
                             "version": 1,
                             "parameters": {
-                                "type": 27142,
-                                "space": ""
+                                "type": 20966
                             },
                             "mapper": {
-                                "email": "{{6.email}}",
-                                "user_id": "{{6.id}}",
-                                "conn_key": ""
+                                "json": "{{1.data}}"
                             },
                             "metadata": {
                                 "designer": {
-                                    "x": 1500,
-                                    "y": 0,
-                                    "name": "connKeyData"
+                                    "x": 900,
+                                    "y": 300,
+                                    "name": "userData"
                                 },
                                 "restore": {
                                     "parameters": {
                                         "type": {
-                                            "label": "jcGetConnKey",
-                                            "nested": [
-                                                {
-                                                    "name": "conn_key",
-                                                    "type": "text",
-                                                    "label": null,
-                                                    "default": null,
-                                                    "required": true,
-                                                    "multiline": false
-                                                },
-                                                {
-                                                    "name": "email",
-                                                    "type": "text",
-                                                    "label": null,
-                                                    "default": null,
-                                                    "required": true,
-                                                    "multiline": false
-                                                },
-                                                {
-                                                    "name": "user_id",
-                                                    "type": "text",
-                                                    "label": null,
-                                                    "default": null,
-                                                    "required": true,
-                                                    "multiline": false
-                                                }
-                                            ]
-                                        },
-                                        "space": {
-                                            "label": "Empty"
+                                            "label": "better"
                                         }
                                     }
                                 },
@@ -500,246 +348,870 @@
                                     {
                                         "name": "type",
                                         "type": "udt",
-                                        "label": "Data structure",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "space",
-                                        "type": "select",
-                                        "label": "Indentation",
-                                        "validate": {
-                                            "enum": [
-                                                "tab",
-                                                "2",
-                                                "4"
-                                            ]
-                                        }
+                                        "label": "Data structure"
                                     }
                                 ],
                                 "expect": [
                                     {
-                                        "name": "conn_key",
+                                        "name": "json",
+                                        "type": "text",
+                                        "label": "JSON string",
+                                        "required": true
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "os",
                                         "type": "text",
                                         "label": null,
-                                        "required": true
+                                        "default": null,
+                                        "required": false,
+                                        "multiline": false
                                     },
                                     {
-                                        "name": "email",
+                                        "name": "ttl",
                                         "type": "text",
                                         "label": null,
-                                        "required": true
+                                        "default": null,
+                                        "required": false,
+                                        "multiline": false
                                     },
                                     {
-                                        "name": "user_id",
+                                        "name": "pub_ip",
                                         "type": "text",
                                         "label": null,
-                                        "required": true
+                                        "default": null,
+                                        "required": false,
+                                        "multiline": false
+                                    },
+                                    {
+                                        "name": "requester username",
+                                        "type": "text",
+                                        "label": null,
+                                        "default": null,
+                                        "required": false,
+                                        "multiline": false
+                                    },
+                                    {
+                                        "name": "region",
+                                        "type": "text",
+                                        "label": null,
+                                        "default": null,
+                                        "required": false,
+                                        "multiline": false
                                     }
                                 ]
                             }
                         },
                         {
-                            "id": 8,
-                            "module": "gateway:WebhookRespond",
+                            "id": 5,
+                            "module": "builtin:BasicRouter",
                             "version": 1,
-                            "parameters": {},
-                            "mapper": {
-                                "body": "{{11.json}}",
-                                "status": "{{1.statusCode}}",
-                                "headers": []
-                            },
-                            "metadata": {
-                                "designer": {
-                                    "x": 1800,
-                                    "y": 0,
-                                    "name": "returnConnKeyArray"
-                                },
-                                "restore": {
-                                    "expect": {
-                                        "headers": {
-                                            "mode": "chose"
-                                        }
-                                    }
-                                },
-                                "expect": [
-                                    {
-                                        "name": "status",
-                                        "type": "uinteger",
-                                        "label": "Status",
-                                        "required": true,
-                                        "validate": {
-                                            "min": 100
-                                        }
-                                    },
-                                    {
-                                        "name": "body",
-                                        "type": "any",
-                                        "label": "Body"
-                                    },
-                                    {
-                                        "name": "headers",
-                                        "spec": [
-                                            {
-                                                "name": "key",
-                                                "type": "text",
-                                                "label": "Key",
-                                                "required": true,
-                                                "validate": {
-                                                    "max": 256
-                                                }
-                                            },
-                                            {
-                                                "name": "value",
-                                                "type": "text",
-                                                "label": "Value",
-                                                "required": true,
-                                                "validate": {
-                                                    "max": 4096
-                                                }
-                                            }
-                                        ],
-                                        "type": "array",
-                                        "label": "Custom headers",
-                                        "validate": {
-                                            "maxItems": 16
-                                        }
-                                    }
-                                ]
-                            }
-                        }
-                    ]
-                },
-                {
-                    "flow": [
-                        {
-                            "id": 9,
-                            "module": "gateway:WebhookRespond",
-                            "version": 1,
-                            "parameters": {},
-                            "filter": {
-                                "name": "if user is not found",
-                                "conditions": [
-                                    [
-                                        {
-                                            "a": "{{7.totalCount}}",
-                                            "b": "0",
-                                            "o": "text:equal"
-                                        }
-                                    ]
-                                ]
-                            },
-                            "mapper": {
-                                "body": "user {{3.email}} is not found! OR the enrollmentPin is incorrect!",
-                                "status": "{{1.statusCode}}",
-                                "headers": []
-                            },
+                            "mapper": null,
                             "metadata": {
                                 "designer": {
                                     "x": 1200,
-                                    "y": 300,
-                                    "name": "userNotFound"
-                                },
-                                "restore": {
-                                    "expect": {
-                                        "headers": {
-                                            "mode": "chose"
-                                        }
-                                    }
-                                },
-                                "expect": [
-                                    {
-                                        "name": "status",
-                                        "type": "uinteger",
-                                        "label": "Status",
-                                        "required": true,
-                                        "validate": {
-                                            "min": 100
-                                        }
-                                    },
-                                    {
-                                        "name": "body",
-                                        "type": "any",
-                                        "label": "Body"
-                                    },
-                                    {
-                                        "name": "headers",
-                                        "spec": [
-                                            {
-                                                "name": "key",
-                                                "type": "text",
-                                                "label": "Key",
-                                                "required": true,
-                                                "validate": {
-                                                    "max": 256
-                                                }
+                                    "y": 300
+                                }
+                            },
+                            "routes": [
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 6,
+                                            "module": "builtin:BasicFeeder",
+                                            "version": 1,
+                                            "parameters": {},
+                                            "filter": {
+                                                "name": "if user is found, unlocked, and Activated",
+                                                "conditions": [
+                                                    [
+                                                        {
+                                                            "a": "{{7.totalCount}}",
+                                                            "b": "0",
+                                                            "o": "text:notequal"
+                                                        },
+                                                        {
+                                                            "a": "{{7.results[].state}}",
+                                                            "b": "ACTIVATED",
+                                                            "o": "text:equal"
+                                                        },
+                                                        {
+                                                            "a": "{{7.results[].account_locked}}",
+                                                            "b": "{{true}}",
+                                                            "o": "text:notequal"
+                                                        }
+                                                    ]
+                                                ]
                                             },
-                                            {
-                                                "name": "value",
-                                                "type": "text",
-                                                "label": "Value",
-                                                "required": true,
-                                                "validate": {
-                                                    "max": 4096
-                                                }
+                                            "mapper": {
+                                                "array": "{{7.results}}"
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1500,
+                                                    "y": 0
+                                                },
+                                                "restore": {
+                                                    "expect": {
+                                                        "array": {
+                                                            "mode": "edit"
+                                                        }
+                                                    }
+                                                },
+                                                "expect": [
+                                                    {
+                                                        "mode": "edit",
+                                                        "name": "array",
+                                                        "spec": [],
+                                                        "type": "array",
+                                                        "label": "Array"
+                                                    }
+                                                ]
                                             }
-                                        ],
-                                        "type": "array",
-                                        "label": "Custom headers",
-                                        "validate": {
-                                            "maxItems": 16
+                                        },
+                                        {
+                                            "id": 11,
+                                            "module": "json:CreateJSON",
+                                            "version": 1,
+                                            "parameters": {
+                                                "type": 27142,
+                                                "space": ""
+                                            },
+                                            "mapper": {
+                                                "email": "{{6.email}}",
+                                                "user_id": "{{6.id}}",
+                                                "conn_key": "78ddc53c541cdcdb736f203ecae736168c2ba1a9"
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1800,
+                                                    "y": 0,
+                                                    "name": "connKeyData"
+                                                },
+                                                "restore": {
+                                                    "parameters": {
+                                                        "type": {
+                                                            "label": "jcGetConnKey",
+                                                            "nested": [
+                                                                {
+                                                                    "name": "conn_key",
+                                                                    "type": "text",
+                                                                    "label": null,
+                                                                    "default": null,
+                                                                    "required": true,
+                                                                    "multiline": false
+                                                                },
+                                                                {
+                                                                    "name": "email",
+                                                                    "type": "text",
+                                                                    "label": null,
+                                                                    "default": null,
+                                                                    "required": true,
+                                                                    "multiline": false
+                                                                },
+                                                                {
+                                                                    "name": "user_id",
+                                                                    "type": "text",
+                                                                    "label": null,
+                                                                    "default": null,
+                                                                    "required": true,
+                                                                    "multiline": false
+                                                                }
+                                                            ]
+                                                        },
+                                                        "space": {
+                                                            "label": "Empty"
+                                                        }
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "type",
+                                                        "type": "udt",
+                                                        "label": "Data structure",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "space",
+                                                        "type": "select",
+                                                        "label": "Indentation",
+                                                        "validate": {
+                                                            "enum": [
+                                                                "tab",
+                                                                "2",
+                                                                "4"
+                                                            ]
+                                                        }
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "conn_key",
+                                                        "type": "text",
+                                                        "label": null,
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "email",
+                                                        "type": "text",
+                                                        "label": null,
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "user_id",
+                                                        "type": "text",
+                                                        "label": null,
+                                                        "required": true
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "id": 8,
+                                            "module": "gateway:WebhookRespond",
+                                            "version": 1,
+                                            "parameters": {},
+                                            "mapper": {
+                                                "body": "{{11.json}}",
+                                                "status": "{{1.statusCode}}",
+                                                "headers": []
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 2100,
+                                                    "y": 0,
+                                                    "name": "returnConnKeyArray"
+                                                },
+                                                "restore": {
+                                                    "expect": {
+                                                        "headers": {
+                                                            "mode": "chose"
+                                                        }
+                                                    }
+                                                },
+                                                "expect": [
+                                                    {
+                                                        "name": "status",
+                                                        "type": "uinteger",
+                                                        "label": "Status",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "min": 100
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "body",
+                                                        "type": "any",
+                                                        "label": "Body"
+                                                    },
+                                                    {
+                                                        "name": "headers",
+                                                        "spec": [
+                                                            {
+                                                                "name": "key",
+                                                                "type": "text",
+                                                                "label": "Key",
+                                                                "required": true,
+                                                                "validate": {
+                                                                    "max": 256
+                                                                }
+                                                            },
+                                                            {
+                                                                "name": "value",
+                                                                "type": "text",
+                                                                "label": "Value",
+                                                                "required": true,
+                                                                "validate": {
+                                                                    "max": 4096
+                                                                }
+                                                            }
+                                                        ],
+                                                        "type": "array",
+                                                        "label": "Custom headers",
+                                                        "validate": {
+                                                            "maxItems": 16
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "id": 15,
+                                            "module": "json:CreateJSON",
+                                            "version": 1,
+                                            "parameters": {
+                                                "type": 27968,
+                                                "space": ""
+                                            },
+                                            "mapper": {
+                                                "attributes": [
+                                                    {
+                                                        "name": "enrollmentPin",
+                                                        "value": "{{floor(random * 999999)}}"
+                                                    }
+                                                ]
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 2400,
+                                                    "y": 0,
+                                                    "name": "reGenUserEnrolPinData"
+                                                },
+                                                "restore": {
+                                                    "parameters": {
+                                                        "type": {
+                                                            "nested": [
+                                                                {
+                                                                    "name": "attributes",
+                                                                    "label": null,
+                                                                    "type": "array",
+                                                                    "spec": {
+                                                                        "type": "collection",
+                                                                        "spec": [
+                                                                            {
+                                                                                "name": "name",
+                                                                                "label": null,
+                                                                                "type": "text",
+                                                                                "default": null,
+                                                                                "required": false,
+                                                                                "multiline": false
+                                                                            },
+                                                                            {
+                                                                                "name": "value",
+                                                                                "label": null,
+                                                                                "type": "text",
+                                                                                "default": null,
+                                                                                "required": false,
+                                                                                "multiline": false
+                                                                            }
+                                                                        ],
+                                                                        "name": "value"
+                                                                    }
+                                                                }
+                                                            ],
+                                                            "label": "updateJCsystemUser"
+                                                        },
+                                                        "space": {
+                                                            "label": "Empty"
+                                                        }
+                                                    },
+                                                    "expect": {
+                                                        "attributes": {
+                                                            "mode": "chose",
+                                                            "items": [
+                                                                null
+                                                            ]
+                                                        }
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "type",
+                                                        "type": "udt",
+                                                        "label": "Data structure",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "space",
+                                                        "type": "select",
+                                                        "label": "Indentation",
+                                                        "validate": {
+                                                            "enum": [
+                                                                "tab",
+                                                                "2",
+                                                                "4"
+                                                            ]
+                                                        }
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "attributes",
+                                                        "type": "array",
+                                                        "label": null,
+                                                        "spec": {
+                                                            "type": "collection",
+                                                            "spec": [
+                                                                {
+                                                                    "name": "name",
+                                                                    "label": null,
+                                                                    "type": "text"
+                                                                },
+                                                                {
+                                                                    "name": "value",
+                                                                    "label": null,
+                                                                    "type": "text"
+                                                                }
+                                                            ],
+                                                            "name": "value"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "id": 14,
+                                            "module": "http:ActionSendDataAPIKeyAuth",
+                                            "version": 3,
+                                            "parameters": {
+                                                "auth": 6028,
+                                                "handleErrors": false
+                                            },
+                                            "mapper": {
+                                                "url": "https://console.jumpcloud.com/api/systemusers/{{6.id}}",
+                                                "serializeUrl": false,
+                                                "method": "put",
+                                                "headers": [],
+                                                "qs": [],
+                                                "bodyType": "raw",
+                                                "parseResponse": false,
+                                                "timeout": "",
+                                                "shareCookies": false,
+                                                "ca": "",
+                                                "rejectUnauthorized": true,
+                                                "followRedirect": true,
+                                                "useQuerystring": false,
+                                                "gzip": true,
+                                                "useMtls": false,
+                                                "contentType": "application/json",
+                                                "data": "{{15.json}}",
+                                                "followAllRedirects": false
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 2700,
+                                                    "y": 0,
+                                                    "name": "rotateUserEnrolPin"
+                                                },
+                                                "restore": {
+                                                    "parameters": {
+                                                        "auth": {
+                                                            "label": "shawnSandbox_WR"
+                                                        }
+                                                    },
+                                                    "expect": {
+                                                        "method": {
+                                                            "mode": "chose",
+                                                            "label": "PUT"
+                                                        },
+                                                        "headers": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "qs": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "bodyType": {
+                                                            "label": "Raw"
+                                                        },
+                                                        "contentType": {
+                                                            "label": "JSON (application/json)"
+                                                        }
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "auth",
+                                                        "type": "keychain:apikeyauth",
+                                                        "label": "Credentials",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "handleErrors",
+                                                        "type": "boolean",
+                                                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "url",
+                                                        "type": "url",
+                                                        "label": "URL",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "serializeUrl",
+                                                        "type": "boolean",
+                                                        "label": "Serialize URL",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "method",
+                                                        "type": "select",
+                                                        "label": "Method",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "enum": [
+                                                                "get",
+                                                                "head",
+                                                                "post",
+                                                                "put",
+                                                                "patch",
+                                                                "delete",
+                                                                "options"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "headers",
+                                                        "type": "array",
+                                                        "label": "Headers",
+                                                        "spec": [
+                                                            {
+                                                                "name": "name",
+                                                                "label": "Name",
+                                                                "type": "text",
+                                                                "required": true
+                                                            },
+                                                            {
+                                                                "name": "value",
+                                                                "label": "Value",
+                                                                "type": "text"
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "name": "qs",
+                                                        "type": "array",
+                                                        "label": "Query String",
+                                                        "spec": [
+                                                            {
+                                                                "name": "name",
+                                                                "label": "Name",
+                                                                "type": "text",
+                                                                "required": true
+                                                            },
+                                                            {
+                                                                "name": "value",
+                                                                "label": "Value",
+                                                                "type": "text"
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "name": "bodyType",
+                                                        "type": "select",
+                                                        "label": "Body type",
+                                                        "validate": {
+                                                            "enum": [
+                                                                "raw",
+                                                                "x_www_form_urlencoded",
+                                                                "multipart_form_data"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "parseResponse",
+                                                        "type": "boolean",
+                                                        "label": "Parse response",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "timeout",
+                                                        "type": "uinteger",
+                                                        "label": "Timeout",
+                                                        "validate": {
+                                                            "max": 300,
+                                                            "min": 1
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "shareCookies",
+                                                        "type": "boolean",
+                                                        "label": "Share cookies with other HTTP modules",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "ca",
+                                                        "type": "cert",
+                                                        "label": "Self-signed certificate"
+                                                    },
+                                                    {
+                                                        "name": "rejectUnauthorized",
+                                                        "type": "boolean",
+                                                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "followRedirect",
+                                                        "type": "boolean",
+                                                        "label": "Follow redirect",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "useQuerystring",
+                                                        "type": "boolean",
+                                                        "label": "Disable serialization of multiple same query string keys as arrays",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "gzip",
+                                                        "type": "boolean",
+                                                        "label": "Request compressed content",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "useMtls",
+                                                        "type": "boolean",
+                                                        "label": "Use Mutual TLS",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "contentType",
+                                                        "type": "select",
+                                                        "label": "Content type",
+                                                        "validate": {
+                                                            "enum": [
+                                                                "text/plain",
+                                                                "application/json",
+                                                                "application/xml",
+                                                                "text/xml",
+                                                                "text/html",
+                                                                "custom"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "data",
+                                                        "type": "buffer",
+                                                        "label": "Request content"
+                                                    },
+                                                    {
+                                                        "name": "followAllRedirects",
+                                                        "type": "boolean",
+                                                        "label": "Follow all redirect",
+                                                        "required": true
+                                                    }
+                                                ]
+                                            }
                                         }
-                                    }
-                                ]
-                            }
+                                    ]
+                                },
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 9,
+                                            "module": "gateway:WebhookRespond",
+                                            "version": 1,
+                                            "parameters": {},
+                                            "filter": {
+                                                "name": "if user is not found",
+                                                "conditions": [
+                                                    [
+                                                        {
+                                                            "a": "{{7.totalCount}}",
+                                                            "b": "0",
+                                                            "o": "text:equal"
+                                                        }
+                                                    ]
+                                                ]
+                                            },
+                                            "mapper": {
+                                                "body": "user {{3.email}} is not found! OR the enrollmentPin is incorrect!",
+                                                "status": "{{1.statusCode}}",
+                                                "headers": []
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1500,
+                                                    "y": 300,
+                                                    "name": "userNotFound"
+                                                },
+                                                "restore": {
+                                                    "expect": {
+                                                        "headers": {
+                                                            "mode": "chose"
+                                                        }
+                                                    }
+                                                },
+                                                "expect": [
+                                                    {
+                                                        "name": "status",
+                                                        "type": "uinteger",
+                                                        "label": "Status",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "min": 100
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "body",
+                                                        "type": "any",
+                                                        "label": "Body"
+                                                    },
+                                                    {
+                                                        "name": "headers",
+                                                        "spec": [
+                                                            {
+                                                                "name": "key",
+                                                                "type": "text",
+                                                                "label": "Key",
+                                                                "required": true,
+                                                                "validate": {
+                                                                    "max": 256
+                                                                }
+                                                            },
+                                                            {
+                                                                "name": "value",
+                                                                "type": "text",
+                                                                "label": "Value",
+                                                                "required": true,
+                                                                "validate": {
+                                                                    "max": 4096
+                                                                }
+                                                            }
+                                                        ],
+                                                        "type": "array",
+                                                        "label": "Custom headers",
+                                                        "validate": {
+                                                            "maxItems": 16
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 10,
+                                            "module": "gateway:WebhookRespond",
+                                            "version": 1,
+                                            "parameters": {},
+                                            "filter": {
+                                                "name": "user is locked out, or suspended",
+                                                "conditions": [
+                                                    [
+                                                        {
+                                                            "a": "{{7.totalCount}}",
+                                                            "b": "0",
+                                                            "o": "text:notequal"
+                                                        },
+                                                        {
+                                                            "a": "{{7.results[].account_locked}}",
+                                                            "b": "{{true}}",
+                                                            "o": "text:equal"
+                                                        }
+                                                    ],
+                                                    [
+                                                        {
+                                                            "a": "{{7.totalCount}}",
+                                                            "b": "0",
+                                                            "o": "text:notequal"
+                                                        },
+                                                        {
+                                                            "a": "{{7.results[].state}}",
+                                                            "b": "ACTIVATED",
+                                                            "o": "text:notequal"
+                                                        }
+                                                    ]
+                                                ]
+                                            },
+                                            "mapper": {
+                                                "body": "user {{3.email}} account lockout is {{7.results[].account_locked}} OR state is {{7.results[].state}}, please contact your admin to check your account status!",
+                                                "status": "{{1.statusCode}}",
+                                                "headers": []
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1500,
+                                                    "y": 600,
+                                                    "name": "userStateInvalid"
+                                                },
+                                                "restore": {
+                                                    "expect": {
+                                                        "headers": {
+                                                            "mode": "chose"
+                                                        }
+                                                    }
+                                                },
+                                                "expect": [
+                                                    {
+                                                        "name": "status",
+                                                        "type": "uinteger",
+                                                        "label": "Status",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "min": 100
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "body",
+                                                        "type": "any",
+                                                        "label": "Body"
+                                                    },
+                                                    {
+                                                        "name": "headers",
+                                                        "spec": [
+                                                            {
+                                                                "name": "key",
+                                                                "type": "text",
+                                                                "label": "Key",
+                                                                "required": true,
+                                                                "validate": {
+                                                                    "max": 256
+                                                                }
+                                                            },
+                                                            {
+                                                                "name": "value",
+                                                                "type": "text",
+                                                                "label": "Value",
+                                                                "required": true,
+                                                                "validate": {
+                                                                    "max": 4096
+                                                                }
+                                                            }
+                                                        ],
+                                                        "type": "array",
+                                                        "label": "Custom headers",
+                                                        "validate": {
+                                                            "maxItems": 16
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
                         }
                     ]
                 },
                 {
                     "flow": [
                         {
-                            "id": 10,
+                            "id": 13,
                             "module": "gateway:WebhookRespond",
                             "version": 1,
                             "parameters": {},
                             "filter": {
-                                "name": "user is locked out, or suspended",
+                                "name": "param doesn't exist",
                                 "conditions": [
                                     [
                                         {
-                                            "a": "{{7.totalCount}}",
-                                            "b": "0",
-                                            "o": "text:notequal"
-                                        },
-                                        {
-                                            "a": "{{7.results[].account_locked}}",
-                                            "b": "{{true}}",
-                                            "o": "text:equal"
+                                            "a": "{{3.email}}",
+                                            "o": "notexist"
                                         }
                                     ],
                                     [
                                         {
-                                            "a": "{{7.totalCount}}",
-                                            "b": "0",
-                                            "o": "text:notequal"
-                                        },
-                                        {
-                                            "a": "{{7.results[].state}}",
-                                            "b": "ACTIVATED",
-                                            "o": "text:notequal"
+                                            "a": "{{3.enrollmentPin}}",
+                                            "o": "notexist"
                                         }
                                     ]
                                 ]
                             },
                             "mapper": {
-                                "body": "user {{3.email}} account lockout is {{7.results[].account_locked}} OR state is {{7.results[].state}}, please contact your admin to check your account status!",
-                                "status": "{{1.statusCode}}",
+                                "body": "access denied",
+                                "status": "403",
                                 "headers": []
                             },
                             "metadata": {
                                 "designer": {
-                                    "x": 1200,
-                                    "y": 600,
-                                    "name": "userStateInvalid"
+                                    "x": 600,
+                                    "y": 900
                                 },
                                 "restore": {
                                     "expect": {
