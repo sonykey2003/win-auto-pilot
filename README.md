@@ -1,10 +1,11 @@
 # Auto-Pilot Windows Provisioning with JumpCloud
 ## Before We Start
 ### You will need:
+* A Window 10 / 11 installation media. 
 * A [JumpCloud](https://jumpcloud.com/) tenant - free for 10 users.
 * A workflow automation tenant. Such as: 
   * [Make.com](https://us1.make.com/) - Exported blueprints can be found in `Make blueprints` folder.
-* An Image distrubition account (Optional):
+* An Image distrubition account, for open-the-box experience (Optional):
   * Dell - [Image Assist](https://techdirect.dell.com/Portal/DellImageAssist.aspx) (FKA: Dell Factory image)
   * Lenovo - [Custom image](https://static.lenovo.com/au/services/pdfs/custom-image.pdf) (Untested, an enterprise account is needed according to [this](https://www.lenovo.com/sg/en/services/pc-services/deploy/customization/))
 * An autounattended.xml (Windows answer file) with desired configrations. You can get it in various ways:
