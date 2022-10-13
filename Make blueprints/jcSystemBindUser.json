@@ -349,7 +349,7 @@
                                     },
                                     "parameters": {
                                         "auth": {
-                                            "label": "shawnSandbox_WR"
+                                            "label": "your_wr_api_key"
                                         }
                                     }
                                 },
@@ -651,7 +651,7 @@
                                     },
                                     "parameters": {
                                         "auth": {
-                                            "label": "shawnSandbox_WR"
+                                            "label": "your_wr_api_key"
                                         }
                                     }
                                 },

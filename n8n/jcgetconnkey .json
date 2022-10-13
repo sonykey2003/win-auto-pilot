@@ -1,0 +1,267 @@
+{
+  "name": "jcgetconnkey",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "455dafd7-90d1-4509-a333-51124c071985",
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "path": "c1f620b1-0fbf-43b1-a716-e799e14d6130",
+        "responseMode": "=responseNode",
+        "options": {}
+      },
+      "id": "35ab7746-daa0-430d-bf83-94a2153f82a8",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        660,
+        300
+      ],
+      "webhookId": "c1f620b1-0fbf-43b1-a716-e799e14d6130"
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "url": "https://console.jumpcloud.com/api/systemusers",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "search[fields][]",
+              "value": "email"
+            },
+            {
+              "name": "search[searchTerm]",
+              "value": "={{ $json[\"query\"][\"email\"] }}"
+            },
+            {
+              "name": "filter",
+              "value": "attributes.name:$eq:enrollmentPin"
+            },
+            {
+              "name": "filter",
+              "value": "=attributes.value:$eq:{{$node[\"Webhook\"].json[\"query\"][\"enrollmentPin\"]}}"
+            }
+          ]
+        }
+      },
+      "id": "527b8641-76c8-4f4f-9810-8f36e1f2aef5",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "1",
+          "name": "shawn_jc_ro"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json[\"totalCount\"] }}",
+              "operation": "notEqual",
+              "value2": "0"
+            },
+            {
+              "value1": "={{ $json[\"results\"][0][\"state\"] }}",
+              "value2": "ACTIVATED"
+            }
+          ],
+          "boolean": [
+            {
+              "value1": "={{ $json[\"results\"][0][\"account_locked\"] }}",
+              "operation": "notEqual",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "c41167bb-6dc3-4f44-8b2a-04af006f63de",
+      "name": "IF",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"email\":\"{{$node[\"HTTP Request\"].json[\"results\"][0][\"email\"]}}\",\"user_id\":\"{{$node[\"HTTP Request\"].json[\"results\"][0][\"id\"]}}\",\"conn_key\":\"78ddc53c541cdcdb736f203ecae736168c2ba1a9\"}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "23df1399-e8ab-47fa-97c2-1246fc3c1260",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1580,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json[\"query\"][\"email\"] }}",
+              "operation": "isNotEmpty"
+            },
+            {
+              "value1": "={{ $json[\"query\"][\"enrollmentPin\"] }}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        },
+        "combineOperation": "any"
+      },
+      "id": "b8d8d8d9-c1b9-4382-8d49-d318e2e21247",
+      "name": "IF1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        900,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "requestMethod": "PUT",
+        "url": "=https://console.jumpcloud.com/api/systemusers/{{$node[\"HTTP Request\"].json[\"results\"][0][\"id\"]}}",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={\"attributes:[{\"name\":\"enrollmentPin\",\"value\":\"\"}]}"
+      },
+      "id": "9297fbd4-0980-4b3c-bc02-0d179576720c",
+      "name": "rotateUserEnrolPin",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        2020,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "2",
+          "name": "shawn_jc_wr"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "f3246ca2-61bc-4ce6-8963-8968569f359a",
+      "name": "ran_num",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        1800,
+        300
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "IF1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "IF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook": {
+      "main": [
+        [
+          {
+            "node": "ran_num",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ran_num": {
+      "main": [
+        [
+          {
+            "node": "rotateUserEnrolPin",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {},
+  "id": 3,
+  "meta": {
+    "instanceId": "03f5a13580516d3a4d904c0961757a6f28dc3a187d332448197734f54f720543"
+  },
+  "tags": [
+    {
+      "id": "1",
+      "name": "win_provisioning",
+      "createdAt": "2022-10-13T03:35:45.868Z",
+      "updatedAt": "2022-10-13T03:35:45.868Z"
+    }
+  ]
+}

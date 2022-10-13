@@ -160,7 +160,7 @@
                                     },
                                     "parameters": {
                                         "auth": {
-                                            "label": "shawnSandBox_RO"
+                                            "label": "your_ro_api_key"
                                         }
                                     }
                                 },
@@ -481,7 +481,7 @@
                                             "mapper": {
                                                 "email": "{{6.email}}",
                                                 "user_id": "{{6.id}}",
-                                                "conn_key": "78ddc53c541cdcdb736f203ecae736168c2ba1a9"
+                                                "conn_key": ""
                                             },
                                             "metadata": {
                                                 "designer": {
@@ -787,7 +787,7 @@
                                                 "restore": {
                                                     "parameters": {
                                                         "auth": {
-                                                            "label": "shawnSandbox_WR"
+                                                            "label": "your_wr_api_key"
                                                         }
                                                     },
                                                     "expect": {
