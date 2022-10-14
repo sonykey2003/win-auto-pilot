@@ -10,12 +10,12 @@ Privisioning Windows devices in a modern way, By:
 
 ### You will need:
 * A Window 10 / 11 installation media. 
-* OR a [MDT](https://github.com/sonykey2003/mdtwinsrv2022) image - 
+* OR a [MDT](https://github.com/sonykey2003/mdtwinsrv2022) image.
 * A [JumpCloud](https://jumpcloud.com/) tenant - free for 10 users.
 * A workflow automation tenant. Such as: 
   * [Make.com](https://us1.make.com/) - Exported blueprints can be found in `Make blueprints` folder.
   * [n8n.io](n8n.io) - Exported workflows can be found in `n8n` folder.
-* An Image distrubition channel, for open-the-box experience, and the benefit for pre-installing the drivers by the manufacturer (Optional):
+* (Optional) An Image distrubition channel, for open-the-box experience, and the benefit for pre-installing the drivers by the manufacturer:
   * Dell - [Image Assist](https://techdirect.dell.com/Portal/DellImageAssist.aspx) (FKA: Dell Factory image), you can submit either an full image or just the autounattended.xml to Dell. 
   * Lenovo - [Custom image](https://static.lenovo.com/au/services/pdfs/custom-image.pdf) (Untested, an enterprise account is needed according to [this](https://www.lenovo.com/sg/en/services/pc-services/deploy/customization/))
 * An autounattended.xml (Windows answer file) with desired configrations. You can get it in various ways:
@@ -33,6 +33,11 @@ On a high level, the 3 workflows will do:
   * By validating the user's email and pre-assigned `enrollmentPin`.
   * Rotate the `enrollmentPin` once obtained.
   * The `enrollmentPin` can be sent to the user as part of the onboarding process, especially for the remote co-workers.
+* Bind the user to the device on JumpCloud.
+* Add the device to designated device group on JumpCloud, thus on day 1:
+  * A set of [security policies](https://support.jumpcloud.com/support/s/article/getting-started-policies-2019-08-21-10-36-47) can be applied.
+  * System [patch policies](https://support.jumpcloud.com/support/s/article/Getting-Started-Patch-Management) can be enforced.
+  * A set of (managed) [software](https://support.jumpcloud.com/support/s/article/Manage-Software-on-User-Devices) will be installed. 
 
 
 **Option 1 - Using Make.com**
