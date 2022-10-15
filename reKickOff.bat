@@ -1,1 +1,2 @@
+:: This line came straight from the unattended.xml - First logon command, can use it restrospectively trigger the provisioning again.
 PowerShell.exe -WindowStyle Maximized -ExecutionPolicy RemoteSigned iex (irm "https://raw.githubusercontent.com/sonykey2003/win-auto-pilot/master/kickOff.ps1")

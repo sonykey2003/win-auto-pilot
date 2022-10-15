@@ -1,12 +1,12 @@
-# Auto-Pilot Windows Provisioning with JumpCloud
+# Auto Provisioning Windows Devices with JumpCloud
 ## Before We Start
 
-### The Problem I Try to Solve
+### The Problem I'm Trying to Solve
 
-Privisioning Windows devices in a modern way, By:
-* Without signing up with `Intune`, and other MSFT pricing ties. 
+To provision Windows devices in a modern way:
+* Without signing up with `Intune`, and the MSFT [enterprise subscriptions](https://www.microsoft.com/en-us/microsoft-365/compare-microsoft-365-enterprise-plans). 
 * Provide an open-the-box expirence for onboarding remote co-workers.
-* Archieve a liteTouch / ZeroTouch Windows provisioning vision for the IT folks.
+* Archieve a liteTouch / ZeroTouch Windows provisioning experience for the IT folks - to save the precious man hours. 
 
 ### You will need:
 * A Window 10 / 11 installation media. 
@@ -150,7 +150,7 @@ $jcSystemAddGroup_url = "your own webhook"
 ```
 
 **C. Kickstart.ps1 hosting**
-Recommended hosting the `Kickstart.ps1` in a publicly accessible, and compliant to your security rquirements. 
+Recommended hosting the `kickOff.ps1` in a publicly accessible, and compliant to your security rquirements. 
 
 It can be:
 * AWS S3 or,
@@ -173,3 +173,7 @@ Once you decided and attained the public url for `kickstart.ps1`, change the url
     <Description>wap kickoff</Description>
 </SynchronousCommand>
 ```
+
+**P.S. Re-provsioning**
+
+You can place `reKickOff.bat` onto an USB stick or the same reachable cloud storage as `kickOff.ps1` as a backup plan in case the initial provisioning failed. 
