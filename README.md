@@ -7,6 +7,7 @@ To provision Windows devices in a modern way:
 * Without signing up with `Intune`, and the MSFT [enterprise subscriptions](https://www.microsoft.com/en-us/microsoft-365/compare-microsoft-365-enterprise-plans). 
 * Provide an open-the-box expirence for onboarding remote co-workers.
 * Archieve a liteTouch / ZeroTouch Windows provisioning experience for the IT folks - to save the precious man hours. 
+* Enforce the security policies and push the managed the softwares with full transparency (to the end users) on d-day.
 
 ### You will need:
 * A Window 10 / 11 installation media. 
