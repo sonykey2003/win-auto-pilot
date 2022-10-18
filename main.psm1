@@ -102,6 +102,7 @@ function Get-MachineType {
    
 }
 
+#using an example combination here for demo, the output hostname can be customised 
 function Set-Hostname {
     Write-LogEntry -Value "Renaming machine" -filename $logfilename
     try{
@@ -145,8 +146,7 @@ function Get-SN {
     
 }
 
-#Getting the JC device enrol connect_key via a custom API call on Make
-#https://us1.make.com/28273/scenarios/395966/edit
+#Getting the JC device enrol connect_key via a custom API call on Make.com
 function getConnKey {
     param (
         [string]$email,
