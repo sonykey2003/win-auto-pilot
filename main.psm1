@@ -151,33 +151,23 @@ function getConnKey {
     param (
         [string]$email,
         [string]$url
-    )
+    )    
     
-    #retry 5 times 
-    $retry = 5
-    do{
-        if ($retry -lt 5){
-            Write-Host "Trying again...please input the correct info!" -ForegroundColor DarkYellow
-        }
-        $email = read-host "please enter your JC email, you have $retry chances left" 
-        $enrollmentPin = Read-Host  "please enter your enrollmentPin, you have $retry chances left" 
-        $params = @{
-            "email"=$email
-            "enrollmentPin" = $enrollmentPin
-        }
-        
-        try{
-            $re = Invoke-RestMethod -Uri $url -Body $params -Method Get -ErrorAction SilentlyContinue
-        }
-        catch [System.Exception]{
-            
-            Write-LogEntry -Value "$($_.Exception.Message)" -filename $logfilename -infotype "Error"
-
-        }
-        $retry -= 1            
-        
+    $email = read-host "please enter your JC email, you have $retry chances left" 
+    $enrollmentPin = Read-Host  "please enter your enrollmentPin, you have $retry chances left" 
+    $params = @{
+        "email"=$email
+        "enrollmentPin" = $enrollmentPin
     }
-    while (($null -eq $re) -and ($retry -gt 0))
+    
+    try{
+        $re = Invoke-RestMethod -Uri $url -Body $params -Method Get -ErrorAction SilentlyContinue
+    }
+    catch [System.Exception]{
+        
+        Write-LogEntry -Value "$($_.Exception.Message)" -filename $logfilename -infotype "Error"
+
+    }
     $re.conn_key = $re.conn_key | ConvertTo-SecureString -AsPlainText -Force
     
     return $re
@@ -188,7 +178,7 @@ function installJCAgent {
     param (
         [parameter(Mandatory=$true)]   
         [string]$conn_Key,
-        [Int32]$agentCheckUp=5
+        [Int32]$agentCheckUp=20
     )
     if ($null -eq $conn_Key){
         Write-Host "JC agent won't be installed, please contact your IT admins!" -ForegroundColor Red
@@ -208,7 +198,7 @@ function installJCAgent {
                 $jcAgentSvc = Get-Service *jumpcloud* -erroraction silentlycontinue
                 Write-Host "Checking if JC agent is running..."
                 $agentCheckUp -= 1
-                sleep 120
+                sleep 20
                 
             } until (
                 ($jcAgentSvc.status -eq "Running") -and (Test-Path $jcConfig) -or $agentCheckUp -gt 0

@@ -22,7 +22,19 @@ $newHostname = Set-Hostname
 # Installing JC agent
 ## Getting the connet key
 $getConnkey_url = "https://hook.us1.make.com/b6rlunkty6aff82mc0sy89u3wpl5xkmh" #change it to your webhook url
-$onboardInfo = getConnKey -url $getConnkey_url 
+
+#retry 5 times if there is wrong inputs
+$retry = 5
+do {
+    if ($retry -lt 5){
+        Write-Host "Trying again...please input the correct info!" -ForegroundColor DarkYellow
+    }
+    $onboardInfo = getConnKey -url $getConnkey_url 
+
+} while (
+    ($null -ne $onboardInfo) -and ($retry -gt 0)
+)
+
 $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($onboardInfo.conn_key)
 $conn_Key = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
 $jcConfig = "C:\Program Files\JumpCloud\Plugins\Contrib\jcagent.conf" 
