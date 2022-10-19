@@ -33,7 +33,7 @@ do {
     $retry -= 1
 
 } while (
-    ($null -eq $onboardInfo) -and ($retry -gt 0)
+    ($null -eq $onboardInfo.conn_key) -and ($retry -gt 0)
 )
 
 $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($onboardInfo.conn_key)
