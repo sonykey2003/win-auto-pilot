@@ -32,7 +32,7 @@ do {
     $onboardInfo = getConnKey -url $getConnkey_url 
 
 } while (
-    ($null -ne $onboardInfo) -and ($retry -gt 0)
+    ($null -ne $onboardInfo.conn_key) -and ($retry -gt 0)
 )
 
 $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($onboardInfo.conn_key)
