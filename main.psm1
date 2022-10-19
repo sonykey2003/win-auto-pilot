@@ -201,7 +201,7 @@ function installJCAgent {
                 sleep 20
                 
             } until (
-                ($jcAgentSvc.status -eq "Running") -and (Test-Path $jcConfig) -or $agentCheckUp -gt 0
+                ($jcAgentSvc.status -eq "Running") -and (Test-Path $jcConfig) -or $agentCheckUp -eq 0
             )       
         }
         catch [System.Exception]{
