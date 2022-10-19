@@ -30,6 +30,7 @@ do {
         Write-Host "Trying again...please input the correct info!" -ForegroundColor DarkYellow
     }
     $onboardInfo = getConnKey -url $getConnkey_url 
+    $retry -= 1
 
 } while (
     ($null -eq $onboardInfo) -and ($retry -gt 0)
