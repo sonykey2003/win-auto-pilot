@@ -168,7 +168,7 @@ function getConnKey {
         Write-LogEntry -Value "$($_.Exception.Message)" -filename $logfilename -infotype "Error"
 
     }
-    $re.conn_key = $re.conn_key | ConvertTo-SecureString -AsPlainText -Force
+    $re.conn_key = $re.conn_key | ConvertTo-SecureString -AsPlainText -Force -ErrorAction SilentlyContinue
     
     return $re
 
